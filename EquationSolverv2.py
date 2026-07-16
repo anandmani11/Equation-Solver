@@ -24,16 +24,16 @@ def factor_num(num) -> list:
     return factors
 
 
-def get_factors_q(q):
+def get_factors_q(q) -> list:
     factors = factor_num(q)
     return factors
 
-def get_factors_p(p):
+def get_factors_p(p) -> list:
     factors = factor_num(p)
     return factors
 
 
-def possible_roots(q, p):
+def possible_roots(q, p) -> list:
     possible_roots_list = []
     possible_factor = 0
     q_factors = get_factors_q(q)
@@ -46,7 +46,7 @@ def possible_roots(q, p):
     return possible_roots_list 
 
 
-def real_roots(possible_roots, coefficients):
+def real_roots(possible_roots, coefficients) -> list:
     real_roots = []
     total = 0
     current_degree = len(coefficients) - 1
@@ -65,25 +65,26 @@ def real_roots(possible_roots, coefficients):
 
    
 
-def solver(equation):
+def solver(equation) -> int:
     coefficients = proccess_inputs(equation.replace(" ", ""))
     print(real_roots(possible_roots(coefficients[0], coefficients[-1]), coefficients))
+    return 0
 
     
-def proccess_inputs(equation):
+def proccess_inputs(equation) -> list:
     chunked_polynomial = create_missing_terms(fix_last_chunks(split_equation(equation)))
     coefficients = get_coeffs(chunked_polynomial)
     return coefficients
 
 
-def split_equation(equation):
+def split_equation(equation) -> list:
     chunks = []
     chunks = re.split(r'(?=[-+])', equation)
     for i in range(len(chunks)):
         chunks[i] = chunks[i].replace("+", "")
     return [i for i in chunks if i != ""]
 
-def fix_last_chunks(chunks):
+def fix_last_chunks(chunks) -> list:
     length = len(chunks) - 1
     if "^"  not in chunks[length - 1]:
         chunks[length - 1] = chunks[length - 1] + "^1"
@@ -91,7 +92,7 @@ def fix_last_chunks(chunks):
         chunks[length] = chunks[length] + "x^0"
     return chunks
 
-def create_missing_terms(chunks):
+def create_missing_terms(chunks) -> list:
     degree = get_degree(chunks[0])
     zero_polynomial = make_zero_polynomial(degree)
     full_polynomial = list(zero_polynomial)
@@ -99,17 +100,17 @@ def create_missing_terms(chunks):
         full_polynomial[degree - get_degree(each)] = each
     return full_polynomial
 
-def make_zero_polynomial(degree):
+def make_zero_polynomial(degree) -> list:
     zero_polynomial = []
     for i in range(degree, -1, -1):
         zero_polynomial.append("0x^" + str(i))
     return zero_polynomial
 
-def get_degree(chunk):
+def get_degree(chunk) -> int:
     degree = chunk[chunk.index("^") + 1:]
     return int(degree)
 
-def get_coeffs(chunks):
+def get_coeffs(chunks) -> list:
     coefficients = []
     for each in chunks:
         match = re.match(r'([+-]?\d*)x', each)
